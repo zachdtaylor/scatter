@@ -1,8 +1,8 @@
 import 'package:flutter/cupertino.dart';
 
-import 'pages/insights/insights_page.dart';
-import 'pages/sprint/sprint_page.dart';
-import 'pages/timeline/timeline_page.dart';
+import 'package:scatter/pages/insights/insights_page.dart';
+import 'package:scatter/pages/sprint/sprint_page.dart';
+import 'package:scatter/pages/timeline/timeline_page.dart';
 
 class Home extends StatelessWidget {
 
