@@ -2,8 +2,8 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
-import 'foundation.dart';
-import 'home.dart';
+import 'package:scatter/check_platform.dart';
+import 'package:scatter/home.dart';
 
 
 void main() {
