@@ -2,28 +2,36 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
+import 'foundation.dart';
+import 'home.dart';
+
+
 void main() {
   SystemChrome.setPreferredOrientations(
     [DeviceOrientation.portraitUp, DeviceOrientation.portraitDown]
   );
-  runApp(ScatterApp());
+  Widget home = Home();
+  runApp(ScatterApp(home: home));
 }
 
 class ScatterApp extends StatelessWidget {
-  // This widget is the root of your application.
-  @override
-  Widget build(BuildContext context) {
-    return CupertinoApp(
-      home: ScatterHomePage(),
-    );
-  }
-}
+  final Widget home;
+  final String title = 'Scatter';
 
-class ScatterHomePage extends StatelessWidget {
+  ScatterApp({Key key, @required this.home}): super(key: key);
+  
   @override
   Widget build(BuildContext context) {
-    return CupertinoPageScaffold(
-      child: Container(),
-    );
+    if (isIos) {
+      return CupertinoApp(
+        title: title,
+        home: home
+      );
+    } else {
+      return MaterialApp(
+        title: title,
+        home: home
+      );
+    }
   }
 }
