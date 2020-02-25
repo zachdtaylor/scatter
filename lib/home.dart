@@ -9,16 +9,24 @@ class Home extends StatelessWidget {
   Widget _tabBuilder(context, index) {
     switch (index) {
       case 0:
-        return InsightsPage();
+        return CupertinoTabView(
+          builder: (context) => InsightsPage() 
+        ); 
         break;
       case 1:
-        return SprintPage();
+        return CupertinoTabView(
+          builder: (context) => SprintPage()
+        );
         break;
       case 2:
-        return TimelinePage();
+        return CupertinoTabView(
+          builder: (context) => TimelinePage()
+        );
         break;
       default:
-        return InsightsPage();
+        return CupertinoTabView(
+          builder: (context) => InsightsPage()
+        );
         break;
     }
   }
