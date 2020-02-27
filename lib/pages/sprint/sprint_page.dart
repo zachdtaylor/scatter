@@ -10,11 +10,35 @@ class _SprintPageState extends State<SprintPage> {
 
   }
 
+  _onCancelPressed() {
+
+  }
+
+  _onStartPressed() {
+
+  }
+
   @override
   Widget build(BuildContext context) {
     return Container(
-      child: CupertinoTimerPicker(
-        onTimerDurationChanged: _onTimerDurationChanged,
+      child: Column(
+        children: <Widget>[
+          CupertinoTimerPicker(
+            onTimerDurationChanged: _onTimerDurationChanged,
+          ),
+          Row(
+            children: <Widget>[
+              CupertinoButton(
+                child: Text('Cancel'),
+                onPressed: _onCancelPressed
+              ),
+              CupertinoButton(
+                child: Text('Start'),
+                onPressed: _onStartPressed
+              ),
+            ]
+          ),
+        ]
       )
     );
   }

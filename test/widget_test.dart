@@ -14,7 +14,7 @@ import 'package:scatter/home.dart';
 void main() {
   testWidgets('Counter increments smoke test', (WidgetTester tester) async {
     // Build our app and trigger a frame.
-    await tester.pumpWidget(ScatterApp(home: Home()));
+    await tester.pumpWidget(ScatterApp(Home()));
 
     // Verify that our counter starts at 0.
     expect(find.text('0'), findsOneWidget);
