@@ -1,7 +1,7 @@
 import 'package:flutter/cupertino.dart';
 
 import 'package:scatter/pages/insights/insights_page.dart';
-import 'package:scatter/pages/sprint/sprint_page.dart';
+import 'package:scatter/pages/sprint/sprint_timer.dart';
 import 'package:scatter/pages/timeline/timeline_page.dart';
 
 class Home extends StatelessWidget {
@@ -15,7 +15,7 @@ class Home extends StatelessWidget {
         break;
       case 1:
         return CupertinoTabView(
-          builder: (context) => SprintPage()
+          builder: (context) => SprintTimer()
         );
         break;
       case 2:
