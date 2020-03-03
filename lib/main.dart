@@ -1,4 +1,5 @@
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:scatter/home.dart';
 
@@ -21,7 +22,11 @@ class ScatterApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return CupertinoApp(
       title: title,
-      home: home
+      home: home,
+      theme: CupertinoThemeData(
+        primaryColor: Color(0xFF699FA1),
+        // accentColor: Color(0xFFDD8627)
+      ),
     );
   }
 }

@@ -4,22 +4,20 @@ import 'dart:math';
 
 class SprintTimerPainter extends CustomPainter {
   final Animation<double> animation;
-  final Color backgroundColor, color;
+  final Color color;
 
   SprintTimerPainter({
     this.animation,
-    this.backgroundColor,
     this.color
   });
 
   @override
   void paint(Canvas canvas, Size size) {
     Paint paint = Paint()
-      ..color = backgroundColor
+      ..color = color
       ..strokeWidth = 10.0
       ..strokeCap = StrokeCap.round
       ..style = PaintingStyle.stroke;
-    paint.color = color;
     canvas.drawArc(Offset.zero & size, pi * 1.5, animation.value, false, paint);
   }
   @override

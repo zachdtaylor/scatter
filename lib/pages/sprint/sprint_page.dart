@@ -88,8 +88,7 @@ class _SprintPageState extends State<SprintPage> with TickerProviderStateMixin {
                               return CustomPaint(
                                 painter: SprintTimerPainter(
                                   animation: animation,
-                                  backgroundColor: CupertinoColors.black,
-                                  color: CupertinoColors.systemBlue
+                                  color: CupertinoTheme.of(context).primaryColor
                                 )
                               );
                             }
@@ -121,7 +120,7 @@ class _SprintPageState extends State<SprintPage> with TickerProviderStateMixin {
                       flex: 30,
                       child: CupertinoButton(
                         child: Text('Cancel'),
-                        color: CupertinoColors.systemRed,
+                        color: CupertinoTheme.of(context).primaryColor,
                         onPressed: started ? _onCancelPressed : null
                       ),
                     ),
@@ -132,7 +131,7 @@ class _SprintPageState extends State<SprintPage> with TickerProviderStateMixin {
                         child: Text(
                           controller.isAnimating ? 'Pause' : 'Start'
                         ),
-                        color: CupertinoColors.systemBlue,
+                        color: CupertinoTheme.of(context).primaryColor,
                         onPressed: _onStartPressed
                       )
                     ),
