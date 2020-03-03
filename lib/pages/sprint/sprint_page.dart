@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import './sprint_timer.dart';
@@ -10,23 +12,20 @@ class SprintPage extends StatefulWidget {
 
 class _SprintPageState extends State<SprintPage> with TickerProviderStateMixin {
   AnimationController controller;
-  Duration timerDuration = Duration.zero;
+  Animation<double> animation;
   bool started = false;
-  bool paused = false;
-  double value;
+
+  @override
+  void initState() {
+    super.initState();
+    controller = AnimationController(
+      vsync: this,
+      duration: Duration(seconds: 0)
+    );
+  }
 
   _onTimerDurationChanged(Duration duration) {
-    setState(() {
-      timerDuration = duration;
-      controller = AnimationController(
-        vsync: this,
-        duration: duration
-      )..addListener(() {
-        setState(() {
-          value = controller.value;
-        });
-      });
-    });
+    controller.duration = duration;
   }
 
   _onCancelPressed() {
@@ -37,34 +36,32 @@ class _SprintPageState extends State<SprintPage> with TickerProviderStateMixin {
   }
 
   _onStartPressed() {
-    setState(() {
-      started = true;
-    });
-    if (controller.isAnimating)
-      controller.stop();
-    else {
-      controller.reverse(
-        from: controller.value == 0.0
-          ? 1.0
-          : controller.value
-      );
+    if (!started) {
+      setState(() {
+        started = true;
+        animation = Tween<double>(begin:2*pi, end:0.0).animate(controller);
+      });
+    } 
+    if (controller.isAnimating) {
+      setState(() {
+        controller.stop();
+      });
+    } else {
+      controller.forward();
     }
   }
 
   String get timerString {
-    Duration duration = controller.duration * controller.value;
+    Duration duration = controller.duration * (1 - controller.value);
     return duration.inHours.toString().padLeft(2, '0') + ':' +
     (duration.inMinutes % 60).toString().padLeft(2, '0') + ':' + 
     (duration.inSeconds % 60).toString().padLeft(2, '0');
   }
 
   @override
-  void initState() {
-    super.initState();
-    controller = AnimationController(
-      vsync: this,
-      duration: Duration(seconds: 0)
-    );
+  void dispose() {
+    controller.dispose();
+    super.dispose();
   }
 
   @override
@@ -86,13 +83,13 @@ class _SprintPageState extends State<SprintPage> with TickerProviderStateMixin {
                       children: <Widget>[
                         Positioned.fill(
                           child: AnimatedBuilder(
-                            animation: controller,
+                            animation: animation,
                             builder: (context, child) {
                               return CustomPaint(
                                 painter: SprintTimerPainter(
-                                  animation: controller,
-                                  backgroundColor: CupertinoColors.activeGreen,
-                                  color: CupertinoColors.black
+                                  animation: animation,
+                                  backgroundColor: CupertinoColors.black,
+                                  color: CupertinoColors.systemBlue
                                 )
                               );
                             }
@@ -100,50 +97,48 @@ class _SprintPageState extends State<SprintPage> with TickerProviderStateMixin {
                         ),
                         Align(
                           alignment: FractionalOffset.center,
-                          child: AnimatedBuilder(
-                            animation: controller,
-                            builder: (context, child) {
-                              return Text(
-                                timerString,
-                                style: TextStyle(
-                                  fontSize: 80.0,
-                                  color: CupertinoColors.black
-                                )
-                              );
-                            }
+                          child: Text(
+                            timerString,
+                            style: TextStyle(
+                              fontSize: 80.0,
+                              color: CupertinoColors.black
+                            )
                           )
                         )
                       ],
                     ) : CupertinoTimerPicker(
-                      initialTimerDuration: timerDuration,
+                      initialTimerDuration: controller.duration,
                       onTimerDurationChanged: _onTimerDurationChanged,
                     )
                   )
                 )
               ),
-              AnimatedBuilder(
-                animation: controller,
-                builder: (context, child) {
-                  return Padding(
-                    padding: EdgeInsets.only(bottom: 100),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                      children: <Widget>[
-                        CupertinoButton(
-                          child: Text('Cancel'),
-                          onPressed: _onCancelPressed
+              Padding(
+                padding: EdgeInsets.only(bottom: 100),
+                child: Row(
+                  children: <Widget>[
+                    Expanded(
+                      flex: 30,
+                      child: CupertinoButton(
+                        child: Text('Cancel'),
+                        color: CupertinoColors.systemRed,
+                        onPressed: started ? _onCancelPressed : null
+                      ),
+                    ),
+                    Spacer(flex: 1),
+                    Expanded(
+                      flex: 30,
+                      child: CupertinoButton(
+                        child: Text(
+                          controller.isAnimating ? 'Pause' : 'Start'
                         ),
-                        CupertinoButton(
-                          child: Text(
-                            controller.isAnimating ? 'Pause' : 'Start'
-                          ),
-                          onPressed: _onStartPressed
-                        ),
-                      ]
-                     )
-                  );
-                }
-              )
+                        color: CupertinoColors.systemBlue,
+                        onPressed: _onStartPressed
+                      )
+                    ),
+                  ]
+                )
+              ),
             ],
           )
         );
