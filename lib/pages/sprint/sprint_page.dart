@@ -2,7 +2,9 @@ import 'dart:math';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_ringtone_player/flutter_ringtone_player.dart';
 import 'package:scatter/app_theme.dart';
+
 
 import './sprint_timer.dart';
 
@@ -23,7 +25,16 @@ class _SprintPageState extends State<SprintPage> with TickerProviderStateMixin {
     controller = AnimationController(
       vsync: this,
       duration: Duration(seconds: 0)
-    );
+    )
+    ..addStatusListener((status)  {
+      if (status == AnimationStatus.completed) {
+        FlutterRingtonePlayer.play(
+          android: AndroidSounds.alarm,
+          ios: IosSounds.alarm,
+          asAlarm: true
+        );
+      }
+    });
   }
 
   _onTimerDurationChanged(Duration duration) {

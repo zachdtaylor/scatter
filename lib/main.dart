@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:scatter/home.dart';
+import 'package:scatter/app_theme.dart';
 
 
 void main() {
@@ -23,6 +24,9 @@ class ScatterApp extends StatelessWidget {
     return CupertinoApp(
       title: title,
       home: home,
+      theme: CupertinoThemeData(
+        primaryColor: AppTheme.primaryColor
+      )
     );
   }
 }
