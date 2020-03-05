@@ -1,6 +1,45 @@
 import 'package:flutter/cupertino.dart';
+import 'package:scatter/app_theme.dart';
 import 'dart:math';
 
+
+class SprintTimer extends StatelessWidget {
+  final Animation<double> animation;
+  final String timerString;
+
+  SprintTimer({this.animation, this.timerString});
+
+  @override
+  Widget build(BuildContext context) {
+    return Stack(
+      children: <Widget>[
+        Positioned.fill(
+          child: AnimatedBuilder(
+            animation: animation,
+            builder: (context, child) {
+              return CustomPaint(
+                painter: SprintTimerPainter(
+                  animation: animation,
+                  color: AppTheme.primaryColor
+                )
+              );
+            }
+          )
+        ),
+        Align(
+          alignment: FractionalOffset.center,
+          child: Text(
+            timerString,
+            style: TextStyle(
+              fontSize: 80.0,
+              color: CupertinoColors.black
+            )
+          )
+        )
+      ],
+    );
+  }
+}
 
 class SprintTimerPainter extends CustomPainter {
   final Animation<double> animation;

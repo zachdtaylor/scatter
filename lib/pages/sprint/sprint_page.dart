@@ -80,32 +80,9 @@ class _SprintPageState extends State<SprintPage> with TickerProviderStateMixin {
                   alignment: FractionalOffset.center,
                   child: AspectRatio(
                     aspectRatio: 1.0,
-                    child: started ? Stack(
-                      children: <Widget>[
-                        Positioned.fill(
-                          child: AnimatedBuilder(
-                            animation: animation,
-                            builder: (context, child) {
-                              return CustomPaint(
-                                painter: SprintTimerPainter(
-                                  animation: animation,
-                                  color: AppTheme.primaryColor
-                                )
-                              );
-                            }
-                          )
-                        ),
-                        Align(
-                          alignment: FractionalOffset.center,
-                          child: Text(
-                            timerString,
-                            style: TextStyle(
-                              fontSize: 80.0,
-                              color: CupertinoColors.black
-                            )
-                          )
-                        )
-                      ],
+                    child: started ? SprintTimer(
+                      animation: animation,
+                      timerString: timerString,
                     ) : CupertinoTimerPicker(
                       initialTimerDuration: controller.duration,
                       onTimerDurationChanged: _onTimerDurationChanged,
