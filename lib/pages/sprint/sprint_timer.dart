@@ -1,6 +1,7 @@
+import 'dart:math';
+
 import 'package:flutter/cupertino.dart';
 import 'package:scatter/app_theme.dart';
-import 'dart:math';
 
 
 class SprintTimer extends StatelessWidget {
