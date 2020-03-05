@@ -2,6 +2,7 @@ import 'dart:math';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:scatter/app_theme.dart';
 import './sprint_timer.dart';
 
 
@@ -88,7 +89,7 @@ class _SprintPageState extends State<SprintPage> with TickerProviderStateMixin {
                               return CustomPaint(
                                 painter: SprintTimerPainter(
                                   animation: animation,
-                                  color: CupertinoTheme.of(context).primaryColor
+                                  color: AppTheme.primaryColor
                                 )
                               );
                             }
@@ -120,7 +121,7 @@ class _SprintPageState extends State<SprintPage> with TickerProviderStateMixin {
                       flex: 30,
                       child: CupertinoButton(
                         child: Text('Cancel'),
-                        color: CupertinoTheme.of(context).primaryColor,
+                        color: AppTheme.accentColor,
                         onPressed: started ? _onCancelPressed : null
                       ),
                     ),
@@ -131,7 +132,7 @@ class _SprintPageState extends State<SprintPage> with TickerProviderStateMixin {
                         child: Text(
                           controller.isAnimating ? 'Pause' : 'Start'
                         ),
-                        color: CupertinoTheme.of(context).primaryColor,
+                        color: AppTheme.primaryColor,
                         onPressed: _onStartPressed
                       )
                     ),

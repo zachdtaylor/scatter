@@ -23,10 +23,6 @@ class ScatterApp extends StatelessWidget {
     return CupertinoApp(
       title: title,
       home: home,
-      theme: CupertinoThemeData(
-        primaryColor: Color(0xFF699FA1),
-        // accentColor: Color(0xFFDD8627)
-      ),
     );
   }
 }
