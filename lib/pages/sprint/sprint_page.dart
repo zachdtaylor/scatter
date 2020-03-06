@@ -5,7 +5,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_ringtone_player/flutter_ringtone_player.dart';
 import 'package:scatter/app_theme.dart';
 
-
 import './sprint_timer.dart';
 
 
@@ -33,6 +32,9 @@ class _SprintPageState extends State<SprintPage> with TickerProviderStateMixin {
           ios: IosSounds.alarm,
           asAlarm: true
         );
+        // May need to wrap this in Future.delayed(Duration.zero, ...)
+        // if something goes wrong later...
+        _createDialog(context);
       }
     });
   }
@@ -62,6 +64,24 @@ class _SprintPageState extends State<SprintPage> with TickerProviderStateMixin {
     } else {
       controller.forward();
     }
+  }
+
+  _createDialog(BuildContext context) {
+    return showCupertinoDialog(
+      context: context,
+      builder: (context) {
+        return CupertinoAlertDialog(
+          title: Text("Sprint Finished!"),
+          actions: <Widget>[
+            CupertinoDialogAction(
+              child: Text("Discard"),
+              onPressed: () => Navigator.pop(context),
+              isDestructiveAction: true,
+            )
+          ],
+        );
+      }
+    );
   }
 
   String get timerString {
