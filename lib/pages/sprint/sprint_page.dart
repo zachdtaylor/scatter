@@ -35,7 +35,15 @@ class _SprintPageState extends State<SprintPage> with TickerProviderStateMixin {
         // May need to wrap this in Future.delayed(Duration.zero, ...)
         // if something goes wrong later...
         _createDialog(context);
+        _resetTimer();
       }
+    });
+  }
+
+  _resetTimer() {
+    setState(() {
+      controller.reset();
+      started = false;
     });
   }
 
@@ -44,10 +52,7 @@ class _SprintPageState extends State<SprintPage> with TickerProviderStateMixin {
   }
 
   _onCancelPressed() {
-    setState(() {
-      controller.reset();
-      started = false;
-    });
+    _resetTimer();
   }
 
   _onStartPressed() {
@@ -58,9 +63,7 @@ class _SprintPageState extends State<SprintPage> with TickerProviderStateMixin {
       });
     } 
     if (controller.isAnimating) {
-      setState(() {
-        controller.stop();
-      });
+      controller.stop();
     } else {
       controller.forward();
     }
