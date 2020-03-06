@@ -48,7 +48,9 @@ class _SprintPageState extends State<SprintPage> with TickerProviderStateMixin {
   }
 
   _onTimerDurationChanged(Duration duration) {
-    controller.duration = duration;
+    setState(() {
+      controller.duration = duration;
+    });
   }
 
   _onCancelPressed() {
@@ -145,7 +147,8 @@ class _SprintPageState extends State<SprintPage> with TickerProviderStateMixin {
                           controller.isAnimating ? 'Pause' : 'Start'
                         ),
                         color: AppTheme.primaryColor,
-                        onPressed: _onStartPressed
+                        onPressed: controller.duration != Duration() ?
+                          _onStartPressed : null
                       )
                     ),
                   ]
