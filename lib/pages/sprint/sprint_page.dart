@@ -90,7 +90,7 @@ class _SprintPageState extends State<SprintPage> with TickerProviderStateMixin {
   }
 
   String get timerString {
-    Duration duration = controller.duration * (1 - controller.value);
+    Duration duration = controller.duration * (1 - controller.value) + Duration(seconds:1);
     return duration.inHours.toString().padLeft(2, '0') + ':' +
     (duration.inMinutes % 60).toString().padLeft(2, '0') + ':' + 
     (duration.inSeconds % 60).toString().padLeft(2, '0');
