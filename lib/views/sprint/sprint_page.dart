@@ -1,9 +1,8 @@
 import 'dart:math';
 
 import 'package:flutter/cupertino.dart';
-import 'package:flutter_platform_widgets/flutter_platform_widgets.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter_ringtone_player/flutter_ringtone_player.dart';
-import 'package:scatter/app_theme.dart';
 import 'package:scatter/views/sprint/sprint_timer_buttons.dart';
 
 import './sprint_timer.dart';
@@ -14,15 +13,17 @@ class SprintPage extends StatefulWidget {
   _SprintPageState createState() => _SprintPageState();
 }
 
-class _SprintPageState extends State<SprintPage> with TickerProviderStateMixin {
-  AnimationController controller;
+class _SprintPageState extends State<SprintPage> with SingleTickerProviderStateMixin {
+  final textController = TextEditingController();
+  
+  AnimationController animationController;
   Animation<double> animation;
   bool started = false;
 
   @override
   void initState() {
     super.initState();
-    controller = AnimationController(
+    animationController = AnimationController(
       vsync: this,
       duration: Duration(seconds: 0)
     )
@@ -43,14 +44,14 @@ class _SprintPageState extends State<SprintPage> with TickerProviderStateMixin {
 
   _resetTimer() {
     setState(() {
-      controller.reset();
+      animationController.reset();
       started = false;
     });
   }
 
   _onTimerDurationChanged(Duration duration) {
     setState(() {
-      controller.duration = duration;
+      animationController.duration = duration;
     });
   }
 
@@ -62,14 +63,20 @@ class _SprintPageState extends State<SprintPage> with TickerProviderStateMixin {
     if (!started) {
       setState(() {
         started = true;
-        animation = Tween<double>(begin:2*pi, end:0.0).animate(controller);
+        animation = Tween<double>(begin:2*pi, end:0.0).animate(
+          animationController
+        );
       });
     } 
-    if (controller.isAnimating) {
-      controller.stop();
+    if (animationController.isAnimating) {
+      animationController.stop();
     } else {
-      controller.forward();
+      animationController.forward();
     }
+  }
+
+  _onSubmitWordCount() {
+    textController.text = "";
   }
 
   _createDialog(BuildContext context) {
@@ -78,11 +85,26 @@ class _SprintPageState extends State<SprintPage> with TickerProviderStateMixin {
       builder: (context) {
         return CupertinoAlertDialog(
           title: Text("Sprint Finished!"),
+          content: Padding(
+            padding: EdgeInsets.only(top: 10.0),
+            child: CupertinoTextField(
+              controller: textController,
+              placeholder: "Word count",
+              keyboardType: TextInputType.number,
+            )
+          ),
           actions: <Widget>[
             CupertinoDialogAction(
               child: Text("Discard"),
               onPressed: () => Navigator.pop(context),
               isDestructiveAction: true,
+            ),
+            CupertinoDialogAction(
+              child: Text("Submit"),
+              onPressed: () {
+                _onSubmitWordCount();
+                Navigator.pop(context);
+              }
             )
           ],
         );
@@ -91,7 +113,8 @@ class _SprintPageState extends State<SprintPage> with TickerProviderStateMixin {
   }
 
   String get timerString {
-    Duration duration = controller.duration * (1 - controller.value) + Duration(seconds:1);
+    Duration duration = animationController.duration * 
+      (1 - animationController.value) + Duration(seconds:1);
     return duration.inHours.toString().padLeft(2, '0') + ':' +
     (duration.inMinutes % 60).toString().padLeft(2, '0') + ':' + 
     (duration.inSeconds % 60).toString().padLeft(2, '0');
@@ -99,14 +122,14 @@ class _SprintPageState extends State<SprintPage> with TickerProviderStateMixin {
 
   @override
   void dispose() {
-    controller.dispose();
+    animationController.dispose();
     super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
     return AnimatedBuilder(
-      animation: controller,
+      animation: animationController,
       builder: (context, child) {
         return Padding(
           padding: EdgeInsets.all(25.0),
@@ -122,7 +145,7 @@ class _SprintPageState extends State<SprintPage> with TickerProviderStateMixin {
                       animation: animation,
                       timerString: timerString,
                     ) : CupertinoTimerPicker(
-                      initialTimerDuration: controller.duration,
+                      initialTimerDuration: animationController.duration,
                       onTimerDurationChanged: _onTimerDurationChanged,
                     )
                   )
@@ -132,7 +155,7 @@ class _SprintPageState extends State<SprintPage> with TickerProviderStateMixin {
                 padding: EdgeInsets.only(bottom: 100),
                 child: SprintTimerButtons(
                   started: started,
-                  controller: controller,
+                  controller: animationController,
                   onCancelPressed: _onCancelPressed,
                   onStartPressed: _onStartPressed,
                 )
