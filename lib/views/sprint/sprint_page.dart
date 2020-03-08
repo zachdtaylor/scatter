@@ -1,9 +1,10 @@
 import 'dart:math';
 
 import 'package:flutter/cupertino.dart';
-import 'package:flutter/material.dart';
+import 'package:flutter_platform_widgets/flutter_platform_widgets.dart';
 import 'package:flutter_ringtone_player/flutter_ringtone_player.dart';
 import 'package:scatter/app_theme.dart';
+import 'package:scatter/views/sprint/sprint_timer_buttons.dart';
 
 import './sprint_timer.dart';
 
@@ -129,29 +130,11 @@ class _SprintPageState extends State<SprintPage> with TickerProviderStateMixin {
               ),
               Padding(
                 padding: EdgeInsets.only(bottom: 100),
-                child: Row(
-                  children: <Widget>[
-                    Expanded(
-                      flex: 30,
-                      child: CupertinoButton(
-                        child: Text('Cancel'),
-                        color: AppTheme.accentColor,
-                        onPressed: started ? _onCancelPressed : null
-                      ),
-                    ),
-                    Spacer(flex: 1),
-                    Expanded(
-                      flex: 30,
-                      child: CupertinoButton(
-                        child: Text(
-                          controller.isAnimating ? 'Pause' : 'Start'
-                        ),
-                        color: AppTheme.primaryColor,
-                        onPressed: controller.duration != Duration() ?
-                          _onStartPressed : null
-                      )
-                    ),
-                  ]
+                child: SprintTimerButtons(
+                  started: started,
+                  controller: controller,
+                  onCancelPressed: _onCancelPressed,
+                  onStartPressed: _onStartPressed,
                 )
               ),
             ],

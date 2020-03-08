@@ -18,7 +18,7 @@ class ScatterApp extends StatelessWidget {
   final String title = 'Scatter';
 
   ScatterApp(this.home);
-  
+
   @override
   Widget build(BuildContext context) {
     return CupertinoApp(
