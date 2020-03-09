@@ -4,27 +4,30 @@ import 'package:flutter/cupertino.dart';
 import 'package:scatter/app_theme.dart';
 
 
-class SprintTimer extends StatelessWidget {
-  final Animation<double> animation;
-  final String timerString;
+class SprintTimer extends AnimatedWidget {
+  final AnimationController controller;
 
-  SprintTimer({this.animation, this.timerString});
+  SprintTimer({this.controller})
+    : super(listenable: Tween<double>(begin:2*pi, end:0.0).animate(controller));
+
+  String get timerString {
+    Duration duration = controller.duration * 
+      (1 - controller.value) + Duration(seconds:1);
+    return duration.inHours.toString().padLeft(2, '0') + ':' +
+    (duration.inMinutes % 60).toString().padLeft(2, '0') + ':' + 
+    (duration.inSeconds % 60).toString().padLeft(2, '0');
+  }
 
   @override
   Widget build(BuildContext context) {
     return Stack(
       children: <Widget>[
         Positioned.fill(
-          child: AnimatedBuilder(
-            animation: animation,
-            builder: (context, child) {
-              return CustomPaint(
-                painter: SprintTimerPainter(
-                  animation: animation,
-                  color: AppTheme.primaryColor
-                )
-              );
-            }
+          child: CustomPaint(
+            painter: SprintTimerPainter(
+              animation: listenable,
+              color: AppTheme.primaryColor
+            )
           )
         ),
         Align(

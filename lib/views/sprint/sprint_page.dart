@@ -1,7 +1,4 @@
-import 'dart:math';
-
 import 'package:flutter/cupertino.dart';
-import 'package:flutter/material.dart';
 import 'package:flutter_ringtone_player/flutter_ringtone_player.dart';
 import 'package:scatter/views/sprint/sprint_timer_buttons.dart';
 
@@ -17,7 +14,6 @@ class _SprintPageState extends State<SprintPage> with SingleTickerProviderStateM
   final textController = TextEditingController();
   
   AnimationController animationController;
-  Animation<double> animation;
   bool started = false;
 
   @override
@@ -63,9 +59,6 @@ class _SprintPageState extends State<SprintPage> with SingleTickerProviderStateM
     if (!started) {
       setState(() {
         started = true;
-        animation = Tween<double>(begin:2*pi, end:0.0).animate(
-          animationController
-        );
       });
     } 
     if (animationController.isAnimating) {
@@ -112,14 +105,6 @@ class _SprintPageState extends State<SprintPage> with SingleTickerProviderStateM
     );
   }
 
-  String get timerString {
-    Duration duration = animationController.duration * 
-      (1 - animationController.value) + Duration(seconds:1);
-    return duration.inHours.toString().padLeft(2, '0') + ':' +
-    (duration.inMinutes % 60).toString().padLeft(2, '0') + ':' + 
-    (duration.inSeconds % 60).toString().padLeft(2, '0');
-  }
-
   @override
   void dispose() {
     animationController.dispose();
@@ -128,42 +113,36 @@ class _SprintPageState extends State<SprintPage> with SingleTickerProviderStateM
 
   @override
   Widget build(BuildContext context) {
-    return AnimatedBuilder(
-      animation: animationController,
-      builder: (context, child) {
-        return Padding(
-          padding: EdgeInsets.all(25.0),
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: <Widget>[
-              Expanded(
-                child: Align(
-                  alignment: FractionalOffset.center,
-                  child: AspectRatio(
-                    aspectRatio: 1.0,
-                    child: started ? SprintTimer(
-                      animation: animation,
-                      timerString: timerString,
-                    ) : CupertinoTimerPicker(
-                      initialTimerDuration: animationController.duration,
-                      onTimerDurationChanged: _onTimerDurationChanged,
-                    )
-                  )
+    return Padding(
+      padding: EdgeInsets.all(25.0),
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: <Widget>[
+          Expanded(
+            child: Align(
+              alignment: FractionalOffset.center,
+              child: AspectRatio(
+                aspectRatio: 1.0,
+                child: started ? SprintTimer(
+                  controller: animationController
+                ) : CupertinoTimerPicker(
+                  initialTimerDuration: animationController.duration,
+                  onTimerDurationChanged: _onTimerDurationChanged,
                 )
-              ),
-              Padding(
-                padding: EdgeInsets.only(bottom: 100),
-                child: SprintTimerButtons(
-                  started: started,
-                  controller: animationController,
-                  onCancelPressed: _onCancelPressed,
-                  onStartPressed: _onStartPressed,
-                )
-              ),
-            ],
-          )
-        );
-      }
+              )
+            )
+          ),
+          Padding(
+            padding: EdgeInsets.only(bottom: 100),
+            child: SprintTimerButtons(
+              started: started,
+              controller: animationController,
+              onCancelPressed: _onCancelPressed,
+              onStartPressed: _onStartPressed,
+            )
+          ),
+        ],
+      )
     );
   }
 }
